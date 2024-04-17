@@ -22,9 +22,9 @@ class Help() : Command {
     }
 }
 
-class Show() : Command {
+class Show(val name: String) : Command {
     override fun isValid(): Boolean {
-        return true
+        return notebook[name] != null
     }
 }
 
@@ -57,16 +57,21 @@ fun readCommand(): Command {
     when (userInput) {
         "exit", "q" -> return Exit()
         "help" -> return Help()
-        "show" -> return Show()
+//        "show" -> return Show()
         "all" -> return All()
     }
 
-    if (!userInput.startsWith("add ")) {
+    if (!userInput.startsWith("add ") && !userInput.startsWith("show ")) {
         return Error("This line is not a Command")
     }
 
     val inputLines = userInput.split(" ")
     val name = inputLines[1]
+
+    if (userInput.startsWith("show ")) {
+        return Show(name)
+    }
+
     val currentCommand = inputLines[2]
     val value = inputLines[3]
 
