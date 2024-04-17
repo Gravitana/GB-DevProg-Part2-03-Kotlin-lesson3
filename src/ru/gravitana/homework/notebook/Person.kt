@@ -16,6 +16,14 @@ class Person(val name: String) {
         }
     }
 
+    fun getPhones(): MutableList<String> {
+        return phones
+    }
+
+    fun getEmails(): MutableList<String> {
+        return emails
+    }
+
     override fun toString(): String {
         return "Person(name='$name', phones=$phones, emails=$emails)"
     }

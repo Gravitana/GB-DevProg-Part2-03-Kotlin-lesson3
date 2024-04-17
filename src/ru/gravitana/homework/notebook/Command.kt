@@ -28,6 +28,12 @@ class Show(val name: String) : Command {
     }
 }
 
+class Find(val value: String) : Command {
+    override fun isValid(): Boolean {
+        return value.isNotBlank()
+    }
+}
+
 class All() : Command {
     override fun isValid(): Boolean {
         return true
@@ -57,20 +63,36 @@ fun readCommand(): Command {
     when (userInput) {
         "exit", "q" -> return Exit()
         "help" -> return Help()
-//        "show" -> return Show()
         "all" -> return All()
     }
 
-    if (!userInput.startsWith("add ") && !userInput.startsWith("show ")) {
+    if (userInput.startsWith("show ")) {
+        val inputLines = userInput.split(" ")
+        return if (inputLines.size != 2) {
+            Error("This line is not a Command")
+        } else {
+            val name = inputLines[1]
+            Show(name)
+        }
+    }
+
+    if (userInput.startsWith("find ")) {
+        val inputLines = userInput.split(" ")
+        val findValue = inputLines[1]
+        return Find(findValue)
+    }
+
+    if (!userInput.startsWith("add ")) {
         return Error("This line is not a Command")
     }
 
     val inputLines = userInput.split(" ")
-    val name = inputLines[1]
 
-    if (userInput.startsWith("show ")) {
-        return Show(name)
+    if (inputLines.size != 4) {
+        return Error("This line is not a Command")
     }
+
+    val name = inputLines[1]
 
     val currentCommand = inputLines[2]
     val value = inputLines[3]

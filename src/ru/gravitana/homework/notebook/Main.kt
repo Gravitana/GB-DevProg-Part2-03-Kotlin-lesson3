@@ -32,6 +32,15 @@ fun printAll() {
     }
 }
 
+fun findPersons(value: String) {
+    for ((name, person) in notebook ) {
+        if (person.getPhones().contains(value)
+            || person.getEmails().contains(value)) {
+            printPerson(person)
+        }
+    }
+}
+
 fun makePerson(name: String): Person {
     return notebook[name] ?: Person(name)
 }
@@ -48,6 +57,7 @@ fun main() {
         if (command.isValid()) {
             when (command) {
                 is Error -> printError(command.error)
+                is Find -> findPersons(command.value)
                 is AddEmail -> {
                     currentPerson = makePerson(command.name)
                     currentPerson.addEmail(command.email)
